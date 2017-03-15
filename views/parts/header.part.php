@@ -32,18 +32,17 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <a class="navbar-brand" href="#">Internshala-Min</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
+          <div class="navbar-right">
+          <?php if(!$loggedIn): ?>
+            <a href='./?controller=user&action=login' class="btn btn-success">Sign in</a>
+            <a href='./?controller=user&action=register' class="btn btn-success">Rregister</a>
+            <?php else: ?>
+            <a href='./?controller=user&action=logout' class="btn btn-success">Logout</a>
+            <?php endif; ?>
+          </div>
         </div><!--/.navbar-collapse -->
       </div>
     </nav>

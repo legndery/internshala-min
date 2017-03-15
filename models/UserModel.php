@@ -18,6 +18,60 @@ class UserModel
         $this->is_employee = $is_employee;
     }
 
+    public static function findUsingUnamePassword($uname,$pword)
+    {
+        $db = Db::getInstance();
+        $userObj = null;
+        $flag = false;
+        if ($stmt = $db->prepare('SELECT * FROM `user` WHERE `uname`=? AND `pword`=?')) {
+
+            $stmt->bind_param("ss", $uname,$pword);
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows == 1){
+                if($userRow = $result->fetch_assoc()){
+                    $userObj =  new UserModel($userRow['id'],
+                                    $userRow['uname'],
+                                    $userRow['pword'],
+                                    $userRow['email'],
+                                    $userRow['isEmployee']);
+                    $flag = true;
+                }
+            }
+            /* close statement */
+            $stmt->close();
+        }
+        return $userObj;
+    }
+    public static function findUsingID($id){
+        $db = Db::getInstance();
+        $userObj = null;
+        $flag = false;
+        if ($stmt = $db->prepare('SELECT * FROM `user` WHERE `id`=?')) {
+
+            $stmt->bind_param("s", $id);
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows == 1){
+                if($userRow = $result->fetch_assoc()){
+                    $userObj =  new UserModel($userRow['id'],
+                                    $userRow['uname'],
+                                    $userRow['pword'],
+                                    $userRow['email'],
+                                    $userRow['isEmployee']);
+                    $flag = true;
+                }
+            }
+            /* close statement */
+            $stmt->close();
+        }
+        return $userObj;
+    }
+    public static function all(){
+        
+    }
     public function getId()
     {
         return $this->id;

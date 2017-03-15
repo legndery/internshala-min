@@ -3,7 +3,7 @@
 
 $controllers = array('pages' => ['home','dashboard', 'error'],
                         'post'=>['internship'],
-                        'sign'=>['login','register']);
+                        'user'=>['login','register','logout']);
 
 
 
@@ -17,6 +17,9 @@ $controllers = array('pages' => ['home','dashboard', 'error'],
       case 'pages':
         $controller = new PagesController();
       break;
+      case 'user':
+        require_once('models/UserModel.php');
+        $controller = new UserController();
     }
 
     // call the action
