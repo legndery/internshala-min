@@ -29,6 +29,7 @@ class PostController
                     require_once('./views/pages/post.internship.view.php');
                 }
             }else{
+                $_SESSION['message'] = new MessageModel(false,"You are not Employee!");
                 header('Location: ./?controller=pages&action=error');
             }
         }else{
@@ -43,9 +44,10 @@ class PostController
                 if($_SERVER['REQUEST_METHOD'] == 'POST'){
                     $internshipID = trim($_POST['internshipID']);
                     $why_hire = trim($_POST['why_hire']);
-                    if(InternshipModel::insert($title, $description, $stipend.' '.$stipend_unit, $startDate, $duration.' '.$duration_unit,$userobj->getId())){
+
+                    if(InternshipApplicationModel::insert($internship, $userobj->getId(), $why_hire)){
                         
-                        $_SESSION['message'] = new MessageModel(false,"Internship Successfully Posted!");
+                        $_SESSION['message'] = new MessageModel(false,"You successfully Applied for the internship!");
                         echo($_SESSION['message']->getMsg());
                     }else{
                         $_SESSION['message'] = new MessageModel(true,"Error Occured! Please Try again!");
