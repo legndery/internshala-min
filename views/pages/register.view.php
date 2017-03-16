@@ -1,6 +1,10 @@
 <div class="container">
     <form action='./?controller=user&action=register' method='post'>
     <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+    </div>
+    <div class="form-group">
         <label for="username">Username</label>
         <input type="text" class="form-control" id="username" placeholder="Username" name="uname">
     </div>

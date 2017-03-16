@@ -36,10 +36,15 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <div class="navbar-right">
+
           <?php if(!$loggedIn): ?>
             <a href='./?controller=user&action=login' class="btn btn-success">Sign in</a>
             <a href='./?controller=user&action=register' class="btn btn-success">Rregister</a>
             <?php else: ?>
+            <span style="color:white">Hi <?php echo $_SESSION['user']->getUname(); ?>!</span>
+            <?php if($_SESSION['user']->isEmployee()==1): ?>
+            <a href='./?controller=post&action=internship' class="btn btn-success">Post Internship</a>
+            <?php endif; ?>
             <a href='./?controller=user&action=logout' class="btn btn-success">Logout</a>
             <?php endif; ?>
           </div>

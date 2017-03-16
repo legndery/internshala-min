@@ -56,11 +56,12 @@ class UserController
     public function register()
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            $name = trim($_POST['name']);
             $uname = trim($_POST['uname']);
             $pword = md5(trim($_POST['pword']));
             $email = trim($_POST['email']);
             $isEmployee = trim($_POST['isEmp']);
-            if($this->register_action($uname, $pword, $email, $isEmployee)){
+            if(UserModel::insert($name, $uname, $pword, $email, $isEmployee)){
                 $_SESSION['message'] = new MessageModel(false,"Successfully Registered, Now you can login!");
                 echo($_SESSION['message']->getMsg());
             }else{
@@ -70,24 +71,24 @@ class UserController
         }
         require_once('./views/pages/register.view.php');
     }
-    public function register_action($uname, $pword, $email, $isEmployee)
-    {   
-        $flag = false;
-        $db = Db::getInstance();
-        if ($stmt = $db->prepare('INSERT INTO `user`(uname, pword, email, isEmployee) VALUES (?, ?, ?,?)')) {
+    // public function register_action($uname, $pword, $email, $isEmployee)
+    // {   
+    //     $flag = false;
+    //     $db = Db::getInstance();
+    //     if ($stmt = $db->prepare('INSERT INTO `user`(uname, pword, email, isEmployee) VALUES (?, ?, ?,?)')) {
 
-            $stmt->bind_param("ssss", $uname,$pword,$email,$isEmployee);
+    //         $stmt->bind_param("ssss", $uname,$pword,$email,$isEmployee);
 
-            $stmt->execute();
+    //         $stmt->execute();
 
-            if($stmt->affected_rows == 1){
-                $flag =  true;
-            }
-            /* close statement */
-            $stmt->close();
-        }
-        return $flag;
-    }
+    //         if($stmt->affected_rows == 1){
+    //             $flag =  true;
+    //         }
+    //         /* close statement */
+    //         $stmt->close();
+    //     }
+    //     return $flag;
+    // }
     public function logout(){
         unset($_SESSION['user']);
         header('Location: ./');

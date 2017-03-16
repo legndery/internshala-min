@@ -1,8 +1,8 @@
 <?php
 
 
-$controllers = array('pages' => ['home','dashboard', 'error'],
-                        'post'=>['internship'],
+$controllers = array('pages' => ['home','dashboard', 'error','viewinternship'],
+                        'post'=>['internship','apply'],
                         'user'=>['login','register','logout']);
 
 
@@ -20,6 +20,12 @@ $controllers = array('pages' => ['home','dashboard', 'error'],
       case 'user':
         require_once('models/UserModel.php');
         $controller = new UserController();
+        break;
+      case 'post':
+        require_once('models/InternshipModel.php');
+        require_once('models/InternshipApplicationModel.php');
+        $controller = new PostController();
+        break;
     }
 
     // call the action

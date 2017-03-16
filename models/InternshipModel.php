@@ -23,6 +23,101 @@ class InternshipModel {
         $this->posted_by = $posted_by;
     }
 
+    public function insert($title='', $description='', $stipend='', $start_date='', $duration='',$posted_by='')
+    {
+        $flag = false;
+        $db = Db::getInstance();
+        if ($stmt = $db->prepare('INSERT INTO `internship`(`Title`, `Description`, `Stipend`, `StartDate`, `Duration`, `PostedBy`) 
+        VALUES (?,?,?,?,?,?)')) {
+
+            $stmt->bind_param("ssssss", $title, $description, $stipend, $start_date, $duration,$posted_by);
+
+            $stmt->execute();
+
+            if($stmt->affected_rows == 1){
+                $flag =  true;
+            }
+            /* close statement */
+            $stmt->close();
+        }
+        return $flag;
+    }
+
+    public function all()
+    {
+        $list = [];
+        $db = Db::getInstance();
+        $req = $db->query('SELECT * FROM `internship`');
+
+        // we create a list of Post objects from the database results
+        while($row = $req->fetch_assoc()) {
+            $list[] = new InternshipModel(
+                $row['ID'],
+                $row['Title'],
+                $row['Description'],
+                $row['Stipend'],
+                $row['StartDate'],
+                $row['Duration'],
+                $row['PostedBy']
+            );
+        }  
+
+        return $list;
+    }
+    public function allTrimmed()
+    {
+        $list = [];
+        $db = Db::getInstance();
+        $req = $db->query('SELECT * FROM `internship`');
+
+        // we create a list of Post objects from the database results
+        while($row = $req->fetch_assoc()) {
+            $userObj = UserModel::findUsingID($row['PostedBy']);
+            $list[] = new InternshipModel(
+                $row['ID'],
+                $row['Title'],
+                '',
+                $row['Stipend'],
+                $row['StartDate'],
+                $row['Duration'],
+                $userObj
+            );
+        }  
+
+        return $list;
+    }
+
+    public function findByID($id)
+    {
+        $db = Db::getInstance();
+        $internshipObj = null;
+        $flag = false;
+        if ($stmt = $db->prepare('SELECT * FROM `internship` WHERE `ID`=?')) {
+
+            $stmt->bind_param("s", $id);
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+            if($result->num_rows == 1){
+                if($row = $result->fetch_assoc()){
+                    $userObj = UserModel::findUsingID($row['PostedBy']);
+                    $internshipObj =  new InternshipModel(
+                                    $row['ID'],
+                                    $row['Title'],
+                                    $row['Description'],
+                                    $row['Stipend'],
+                                    $row['StartDate'],
+                                    $row['Duration'],
+                                    $userObj
+                                );
+                    $flag = true;
+                }
+            }
+            /* close statement */
+            $stmt->close();
+        }
+        return $internshipObj;
+    }
     public function getId()
     {
         return $this->id;
